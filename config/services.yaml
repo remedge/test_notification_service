@@ -16,9 +16,16 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Doctrine
+    _instanceof:
+        App\Shared\Infrastructure\Doctrine\Mapping\DoctrineMapping:
+            tags: [ 'app.doctrine.class-mapping' ]
+
+    doctrine.orm.default_php_metadata_driver:
+        class: App\Shared\Infrastructure\Doctrine\Mapping\PhpMappingDriver
+        bind:
+            $mappings: !tagged_iterator app.doctrine.class-mapping
